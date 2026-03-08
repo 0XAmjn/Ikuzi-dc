@@ -1,14 +1,12 @@
-
 const { Client, GatewayIntentBits, EmbedBuilder, Partials } = require('discord.js');
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
 
-// --- KONFIGURATION ---
-// Diese Werte sollten in einer .env Datei gespeichert werden
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY; // Nutze den Service Role Key für Admin-Rechte
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const PROOF_CHANNEL_ID = process.env.DISCORD_CHANNEL_ID || "1444335751012552876";
+// --- KONFIGURATION (DIREKT EINGEBETTET) ---
+// Da keine .env Datei unterstützt wird, tragen wir die Werte hier direkt ein.
+const SUPABASE_URL = "https://iryzynxbnguhtlwrztwo.supabase.co";
+const SUPABASE_SERVICE_ROLE_KEY = "sb_secret_m76PUx..."; // Ersetze dies durch deinen tatsächlichen Secret Key
+const DISCORD_TOKEN = "MTQ4MDE3NzQ0MzU1Mjg5MTA1NQ.GBjAd5..."; // Ersetze dies durch deinen tatsächlichen Bot Token
+const PROOF_CHANNEL_ID = "1444335751012552876";
 
 // Initialisierung Supabase
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -38,9 +36,6 @@ client.on('messageCreate', async (message) => {
     if (message.channelId === PROOF_CHANNEL_ID) {
         if (message.attachments.size > 0) {
             console.log(`Neuer Proof von ${message.author.username} erkannt.`);
-            // Hier könnten zusätzliche Validierungen stattfinden
-            // Da das Frontend die Discord API direkt abfragt, müssen wir hier nichts in der DB speichern,
-            // außer du möchtest eine persistente Historie in Supabase.
         }
     }
 
@@ -50,9 +45,7 @@ client.on('messageCreate', async (message) => {
     const command = args.shift().toLowerCase();
 
     // Command: !status [modul] [status]
-    // Beispiel: !status advanced undetected
     if (command === 'status') {
-        // Berechtigungscheck (z.B. nur Admins)
         if (!message.member.permissions.has('Administrator')) {
             return message.reply('Du hast keine Berechtigung, den Systemstatus zu ändern.');
         }
@@ -112,8 +105,7 @@ client.on('messageCreate', async (message) => {
     }
 });
 
-// --- AUTOMATISCHE SYNCHRONISIERUNG (Optional) ---
-// Prüft beim Beitritt eines Mitglieds, ob er in der Datenbank ist
+// --- AUTOMATISCHE SYNCHRONISIERUNG ---
 client.on('guildMemberAdd', async (member) => {
     const { error } = await supabase
         .from('profiles')
