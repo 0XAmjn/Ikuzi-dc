@@ -1,0 +1,13 @@
+{
+  "name": "ikuzi-bot",
+  "version": "1.0.0",
+  "description": "Ikuzi Media Bridge",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "@supabase/supabase-js": "^2.39.7"
+  }
+}
